@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <AzureCredentials>{"ServiceManagementEndpoint":"https:\/\/management.core.windows.net\/","ResourceManagementEndpoint":"https:\/\/management.azure.com\/","SubscriptionId":"c92800f8-c9f7-4ddd-abd0-9838e11dee01"}</AzureCredentials>
+    <AzureDeploymentLabel>url-shortener</AzureDeploymentLabel>
+    <AzureEnableRemoteDesktop>False</AzureEnableRemoteDesktop>
+    <AzureServiceConfiguration>Cloud</AzureServiceConfiguration>
+    <AzureSolutionConfiguration>Release</AzureSolutionConfiguration>
+    <AzureAppendTimestampToDeploymentLabel>True</AzureAppendTimestampToDeploymentLabel>
+    <EnableApplicationInsights>True</EnableApplicationInsights>
+    <AzureRMCloudServiceV2Name>santanu-url-shortener</AzureRMCloudServiceV2Name>
+    <AzureRMCloudServiceV2ResourceGroupName>URL-SHORTENER</AzureRMCloudServiceV2ResourceGroupName>
+    <AzureRMCloudServiceV2Location>{"Name":"centralindia","DisplayName":"Central India"}</AzureRMCloudServiceV2Location>
+    <AzureRMKeyVaultName />
+    <AzureRMKeyVaultResourceGroupName />
+    <AzureRMKeyVaultLocation />
+    <AzureRMStorageAccountName>santanuurlshortenerstg</AzureRMStorageAccountName>
+    <AzureRMStorageAccountResourceGroupName>url-shortener</AzureRMStorageAccountResourceGroupName>
+    <AzureRMStorageAccountLocation>{"Name":"centralindia","DisplayName":"Central India"}</AzureRMStorageAccountLocation>
+    <AzureRMSwappableCloudServiceV2Name />
+    <AzureRMSwappableCloudServiceV2ResourceGroupName />
+    <AzureRMSwappableCloudServiceV2Location />
+  </PropertyGroup>
+</Project>

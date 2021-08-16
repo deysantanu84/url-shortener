@@ -1,0 +1,127 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "cloudServiceName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the cloud service"
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location of the cloud service"
+      }
+    },
+    "deploymentLabel": {
+      "type": "string",
+      "metadata": {
+        "description": "Label of the deployment"
+      }
+    },
+    "packageSasUri": {
+      "type": "securestring",
+      "metadata": {
+        "description": "SAS Uri of the CSPKG file to deploy"
+      }
+    },
+    "configurationSasUri": {
+      "type": "securestring",
+      "metadata": {
+        "description": "SAS Uri of the service configuration (.cscfg)"
+      }
+    },
+    "roles": {
+      "type": "array",
+      "metadata": {
+        "description": "Roles created in the cloud service application"
+      }
+    },
+    "wadPublicConfig_WebRole1": {
+      "type": "string",
+      "metadata": {
+        "description": "Public configuration of Windows Azure Diagnostics extension"
+      }
+    },
+    "wadPrivateConfig_WebRole1": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Private configuration of Windows Azure Diagnostics extension"
+      }
+    },
+    "upgradeMode": {
+      "type": "string",
+      "defaultValue": "Auto",
+      "metadata": {
+        "UpgradeMode": "UpgradeMode of the CloudService"
+      }
+    }
+  },
+  "variables": {
+    "cloudServiceName": "[parameters('cloudServiceName')]",
+    "subscriptionID": "[subscription().subscriptionId]",
+    "dnsName": "[variables('cloudServiceName')]",
+    "lbName": "[concat(variables('cloudServiceName'), 'LB')]",
+    "lbFEName": "[concat(variables('cloudServiceName'), 'LBFE')]",
+    "resourcePrefix": "[concat('/subscriptions/', variables('subscriptionID'), '/resourceGroups/', resourceGroup().name, '/providers/')]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2021-03-01",
+      "type": "Microsoft.Compute/cloudServices",
+      "name": "[variables('cloudServiceName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "DeploymentLabel": "[parameters('deploymentLabel')]",
+        "DeployFromVisualStudio": "true"
+      },
+      "dependsOn": [],
+      "properties": {
+        "packageUrl": "[parameters('packageSasUri')]",
+        "configurationUrl": "[parameters('configurationSasUri')]",
+        "upgradeMode": "[parameters('upgradeMode')]",
+        "roleProfile": {
+          "roles": "[parameters('roles')]"
+        },
+        "networkProfile": {
+          "loadBalancerConfigurations": [
+            {
+              "name": "santanu-url-shortenerLB",
+              "properties": {
+                "frontendIpConfigurations": [
+                  {
+                    "name": "santanu-url-shortenerLBFE",
+                    "properties": {
+                      "publicIPAddress": {
+                        "id": "/subscriptions/c92800f8-c9f7-4ddd-abd0-9838e11dee01/resourceGroups/url-shortener/providers/Microsoft.Network/publicIPAddresses/santanu-url-shortenerIP"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "extensionProfile": {
+          "extensions": [
+            {
+              "name": "Microsoft.Insights.VMDiagnosticsSettings_WebRole1",
+              "properties": {
+                "autoUpgradeMinorVersion": true,
+                "publisher": "Microsoft.Azure.Diagnostics",
+                "type": "PaaSDiagnostics",
+                "typeHandlerVersion": "1.5",
+                "settings": "[parameters('wadPublicConfig_WebRole1')]",
+                "protectedSettings": "[parameters('wadPrivateConfig_WebRole1')]",
+                "rolesAppliedTo": [
+                  "WebRole1"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
